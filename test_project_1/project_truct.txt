@@ -1,0 +1,39 @@
+voice_dialogue_system/
+│
+├── datasets/
+│   ├── train/                    # 训练数据集目录
+│   └── test/                     # 测试数据集目录
+│
+├── models/
+│   ├── speech_recognition/       # 存放语音识别模型的目录
+│   └── nlp_models/               # 存放自然语言处理模型的目录
+│
+├── src/
+│   ├── speech_recognition/
+│   │   ├── audio_processing/     # 音频处理的工具函数
+│   │   │   └── filter.py         # 示例音频过滤工具
+│   │   ├── recognizer.py         # 语音识别脚本
+│   │   └── utils.py              # 语音识别工具函数
+│   │
+│   ├── nlp/
+│   │   ├── intent_recognition/   # 意图识别相关脚本
+│   │   │   └── classifier.py     # 意图分类器
+│   │   ├── entity_extraction/    # 实体提取相关脚本
+│   │   │   └── extractor.py      # 实体提取器
+│   │   └── dialogue_management/  # 对话管理脚本
+│   │       └── manager.py        # 对话管理器
+│   │
+│   ├── tts/                      # 文本到语音转换
+│   │   └── synthesizer.py        # 语音合成器脚本
+│   │
+│   └── main.py                   # 主程序入口
+│
+├── database/
+│   ├── db_schema.sql             # 数据库架构定义文件
+│   └── crud_operations.py        # 数据库CRUD操作脚本
+│
+├── notebooks/                    # Jupyter笔记本目录
+├── docs/                         # 文档目录
+├── tests/                        # 测试代码目录
+├── requirements.txt              # 项目依赖列表
+└── README.md                     # 项目README文件

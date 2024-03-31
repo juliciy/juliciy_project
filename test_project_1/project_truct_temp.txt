@@ -1,0 +1,39 @@
+voice_dialogue_system/
+│
+├── datasets/
+│   ├── train/
+│   └── test/
+│
+├── models/
+│   ├── speech_recognition/
+│   └── nlp_models/
+│
+├── src/
+│   ├── speech_recognition/
+│   │   ├── audio_processing/
+│   │   │   └── filter.py
+│   │   ├── recognizer.py
+│   │   └── utils.py
+│   │
+│   ├── nlp/
+│   │   ├── intent_recognition/
+│   │   │   └── classifier.py
+│   │   ├── entity_extraction/
+│   │   │   └── extractor.py
+│   │   └── dialogue_management/
+│   │       └── manager.py
+│   │
+│   ├── tts/
+│   │   └── synthesizer.py
+│   │
+│   └── main.py
+│
+├── database/
+│   ├── db_schema.sql
+│   └── crud_operations.py
+│
+├── notebooks/
+├── docs/
+├── tests/
+├── requirements.txt
+└── README.md
