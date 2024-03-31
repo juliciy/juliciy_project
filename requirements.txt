@@ -1,0 +1,4 @@
+deepspeech==0.9.3
+numpy==1.17.3
+pydub==0.25.1
+some-package==0.1
