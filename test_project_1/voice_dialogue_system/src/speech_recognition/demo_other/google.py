@@ -12,9 +12,9 @@ def transcribe_audio(audio_file_path, language="zh-CN"):
         transcript = recognizer.recognize_google(audio_data, language=language)
         return transcript
     except sr.UnknownValueError:
-        print("Google Speech Recognition could not understand the audio")
+        print("无法理解音频内容，请重新尝试。")  # Google 语音识别无法理解音频内容
     except sr.RequestError as e:
-        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+        print("无法从 Google 语音识别服务请求结果；{0}".format(e))  # 无法从 Google 语音识别服务获取结果
 
 if __name__ == "__main__":
     audio_file_path = "./audio_nihao.wav"

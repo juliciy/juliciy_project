@@ -1,22 +1,21 @@
-import deepspeech
-import wave
-import numpy as np
+import speech_recognition as sr
 
-# 加载预训练模型
-model_file_path = './deepspeech-0.9.3-models.pbmm'  # 更新为你的模型文件路径
-model = deepspeech.Model(model_file_path)
+def transcribe_audio(audio_file_path, language="zh-CN"):
+    recognizer = sr.Recognizer()
 
-# 如果有一个语言模型（.scorer文件），可以加载以提高准确率
-# scorer_file_path = 'deepspeech-0.9.3-models.scorer'  # 更新为你的语言模型文件路径
-# model.enableExternalScorer(scorer_file_path)
+    with sr.AudioFile(audio_file_path) as source:
+        audio_data = recognizer.record(source)  # 读取音频文件
 
-# 读取音频文件
-audio_file = './audio_nihao.wav'  # 更新为你的音频文件路径
-w = wave.open(audio_file, 'r')
-frames = w.readframes(w.getnframes())
-audio = np.frombuffer(frames, np.int16)
+    try:
+        # 使用 Google 语音识别引擎识别音频
+        transcript = recognizer.recognize_google(audio_data, language=language)
+        return transcript
+    except sr.UnknownValueError:
+        print("无法理解音频内容，请重新尝试。")  # Google 语音识别无法理解音频内容
+    except sr.RequestError as e:
+        print("无法从 Google 语音识别服务请求结果；{0}".format(e))  # 无法从 Google 语音识别服务获取结果
 
-# 运行语音识别
-text = model.stt(audio)
-print("输出结果：")
-print(text)
+if __name__ == "__main__":
+    audio_file_path = "./audio_nihao.wav"
+    transcript = transcribe_audio(audio_file_path)
+    print("Transcript:", transcript)
