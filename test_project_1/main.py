@@ -131,6 +131,7 @@ if __name__ == '__main__':
         print(file)
 
     # 根据解析的路径，创建文件夹和文件
+
     create_structure(folders, files)
 
 

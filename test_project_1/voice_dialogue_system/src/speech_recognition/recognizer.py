@@ -1,38 +1,31 @@
-# 引入科大讯飞的语音识别库
-from xfyun import SpeechRecognizer
-import json
-
-# 初始化语音识别类
-# 替换下面的'appid'和'apikey'为你的应用信息
-recognizer = SpeechRecognizer(appid="你的APPID", api_key="你的API Key")
-
-
-def recognize_audio(file_path):
-    """
-    使用科大讯飞进行语音识别。
-
-    参数:
-        file_path (str): 音频文件的路径。
-
-    返回:
-        str: 转换得到的文本。
-    """
-    # 执行语音识别
-    result = recognizer.recognize_audio(file_path=file_path, language="zh_cn")
-
-    # 解析结果
-    if result["code"] == "0":
-        # 识别成功，打印并返回结果
-        print("识别结果：", result["data"])
-        return result["data"]
-    else:
-        # 识别失败，打印错误信息
-        print("识别失败：", result["message"])
-        return ""
-
 
 # 示例用法
+import os
+
+from test_project_1.voice_dialogue_system.src.speech_recognition.demo_other.google import transcribe_audio
+from test_project_1.voice_dialogue_system.src.speech_recognition.record_audio_dir.record_audio import recode_audio_test,record_audio
+
+def save_transcript(transcript, output_file_path):
+    with open(output_file_path, "w", encoding="utf-8") as file:
+        file.write(transcript)
+
+
+def record_and_transcribe_audio():
+    # 开始录音
+    audio_save_file_path = "./record_audio_dir/wav_dir/"
+    record_audio(audio_save_file_path)
+
+    # 语音转文本
+    audio_file_path = "./record_audio_dir/wav_dir/recorded_audio.wav"
+    transcript = transcribe_audio(audio_file_path)
+    print("Transcript:", transcript)
+
+    # 文本储存到指定目录
+    output_file_path = "./output/transcript.txt"  # 指定保存文本的路径
+    tts_input_file_path = "../tts/input/transcript.txt"  # 指定保存文本的路径
+    save_transcript(transcript, output_file_path)
+    save_transcript(transcript, tts_input_file_path)
+    print("Transcript saved to:", output_file_path)
+
 if __name__ == "__main__":
-    audio_path = "path_to_your_audio_file.wav"  # 替换为你的音频文件路径
-    text = recognize_audio(audio_path)
-    print("转换文本：", text)
+    record_and_transcribe_audio()
