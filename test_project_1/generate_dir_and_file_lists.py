@@ -112,7 +112,6 @@ if __name__ == '__main__':
     with open("project_truct.txt", "r", encoding='utf-8') as file:
         directory_structure = file.read()
 
-
     # 去掉注释
     directory_structure = remove_comments_and_leading_spaces(directory_structure)
 

@@ -23,6 +23,13 @@ voice_dialogue_system/
 │   │   └── dialogue_management/
 │   │       └── manager.py
 │   │
+│   ├── AGI/
+│   │
+│   ├── AIGC/
+│   │   ├── utils/
+│   │   ├── model/
+│   │   └── AIGC_main.py
+│   │
 │   ├── tts/
 │   │   └── synthesizer.py
 │   │
