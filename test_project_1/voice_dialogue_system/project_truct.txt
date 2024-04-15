@@ -9,19 +9,6 @@ voice_dialogue_system/
 │   └── nlp_models/               # 存放自然语言处理模型的目录
 │
 ├── src/
-│   ├── record_audio_dir/         # 录音的临时文件夹
-│   │
-│   ├── wake_word/                  # 新增唤醒词识别模块目录
-│   │   ├── utils/                  # 存放功能函数的文件夹
-│   │   │   └── functions.py        # 唤醒词相关工具函数
-│   │   ├── user_wake_words/        # 用于存放用户唤醒词录音
-│   │   │   └── user_1/             # 唤醒词相关工具函数
-│   │   ├── user_wake_words_temp/   # 用于存放用户唤醒词录音的核准文件
-│   │   │   └── temp.wav            # 样例
-│   │   ├── wake_word_recorder.py   # 新增唤醒词录音脚本
-│   │   ├── wake_word_detector.py   # 唤醒词检测器脚本
-│   │   └── wake_word_utils.py      # 唤醒词相关工具函数
-│   │
 │   ├── speech_recognition/
 │   │   ├── audio_processing/     # 音频处理的工具函数
 │   │   │   └── filter.py         # 示例音频过滤工具

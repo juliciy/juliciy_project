@@ -1,0 +1,35 @@
+[33mcommit 831941fda437deedce746bf931afe45c08526e09[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: juliciy <1343976313@qq.com>
+Date:   Sun Apr 14 22:45:09 2024 +0800
+
+    添加requirements.txt文件
+
+[33mcommit 3ba6e334de595ebb6d4842597769c40a9d8e96cf[m
+Author: juliciy <1343976313@qq.com>
+Date:   Sun Apr 14 22:42:04 2024 +0800
+
+    添加本地的语音转文本的功能，放弃谷歌的这项功能
+
+[33mcommit 383488a1a793bd08b2689243b73c1da9dcee7581[m
+Author: juliciy <1343976313@qq.com>
+Date:   Tue Apr 2 01:11:16 2024 +0800
+
+    尝试新的方法，语音转模型
+
+[33mcommit 9d816fa39d4f88ce6334006edea294e796fae9a4[m
+Author: juliciy <1343976313@qq.com>
+Date:   Tue Apr 2 00:47:28 2024 +0800
+
+    实现了语音转文本，文本转语音的功能
+
+[33mcommit 3c95dadbb14e484505a05c09c725d5fa8ffd26e8[m
+Author: juliciy <1343976313@qq.com>
+Date:   Mon Apr 1 00:59:05 2024 +0800
+
+    添加了其他模型
+
+[33mcommit f99a041c31dd270b912fca3cc8f8fbfa422d90f7[m
+Author: juliciy <1343976313@qq.com>
+Date:   Sun Mar 31 23:46:03 2024 +0800
+
+    首次提交，内容有框架

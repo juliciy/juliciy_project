@@ -38,6 +38,9 @@ def main():
     """
     while True:  # 持续接收用户输入
         print("请说话（'q' 结束对话）：")
+
+        # 第一步： 进行唤醒词模块，
+
         # 录音并转录为文本
         user = process_audio_to_text()
         print("user : ", user)

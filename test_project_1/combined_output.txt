@@ -1,0 +1,970 @@
+Filename: project_truct.txt
+voice_dialogue_system/
+│
+├── datasets/
+│   ├── train/                    # 训练数据集目录
+│   └── test/                     # 测试数据集目录
+│
+├── models/
+│   ├── speech_recognition/       # 存放语音识别模型的目录
+│   └── nlp_models/               # 存放自然语言处理模型的目录
+│
+├── src/
+│   ├── speech_recognition/
+│   │   ├── audio_processing/     # 音频处理的工具函数
+│   │   │   └── filter.py         # 示例音频过滤工具
+│   │   ├── recognizer.py         # 语音识别脚本
+│   │   └── utils.py              # 语音识别工具函数
+│   │
+│   ├── nlp/
+│   │   ├── intent_recognition/   # 意图识别相关脚本
+│   │   │   └── classifier.py     # 意图分类器
+│   │   ├── entity_extraction/    # 实体提取相关脚本
+│   │   │   └── extractor.py      # 实体提取器
+│   │   └── dialogue_management/  # 对话管理脚本
+│   │       └── manager.py        # 对话管理器
+│   │
+│   ├── AGI/                      # AGI指的是能够执行任何智能任务的人工智能系统，这种智能与人类的智能相当，甚至在某些方面可能超过人类。AGI可以理解、学习和应用知识在多种非常不同和广泛的领域。AGI的目标是创造出可以独立思考和理解复杂情况的智能，这种智能能够在不同的环境和情况下适应和执行各种任务。开发AGI面临巨大的技术和伦理挑战，包括如何设计能够具有广泛适应性和深层次推理能力的算法，以及如何管理这种智能可能带来的社会影响。
+│   │
+│   ├── AIGC/                     # AIGC指的是使用人工智能技术自动生成的内容，例如文本、图像、音乐和视频等。这类技术通常利用机器学习模型，特别是深度学习方法，如生成对抗网络（GANs）或变分自编码器（VAEs）来创造新的内容。AIGC的应用非常广泛，从自动写作、绘画、音乐创作到视频游戏内容生成等，都可以看到其身影。这些技术使得内容创造变得更加快速和成本效率，同时也在艺术和创意产业中开启了新的可能性。与AGI相比，AIGC的关注点更专注于特定任务的完成，如何让机器在某一领域内高效地生成高质量和富有创意的内容。
+│   │   ├── utils/                # 用于存放实用工具函数或通用辅助函数。
+│   │   ├── model/                # 用于AIGC的相关模型，供主函数进行调用。
+│   │   └── AIGC_main.py          # 该模块的测试，调用模块。
+│   │
+│   ├── tts/                      # 文本到语音转换
+│   │   └── synthesizer.py        # 语音合成器脚本
+│   │
+│   └── main.py                   # 主程序入口
+│
+├── database/
+│   ├── db_schema.sql             # 数据库架构定义文件
+│   └── crud_operations.py        # 数据库CRUD操作脚本
+│
+├── notebooks/                    # Jupyter笔记本目录
+├── docs/                         # 文档目录
+├── tests/                        # 测试代码目录
+├── requirements.txt              # 项目依赖列表
+└── README.md                     # 项目README文件
+
+Filename: database\crud_operations.py
+
+Filename: src\main.py
+from test_project_1.voice_dialogue_system.src.AIGC.AIGC_main import AIGC_main
+from test_project_1.voice_dialogue_system.src.speech_recognition.recognizer import record_and_transcribe_audio, \
+    record_and_transcribe_audio_for_openai_whisper
+from test_project_1.voice_dialogue_system.src.tts.library_function.text_to_speech_test import text_to_speech_and_play
+
+
+def process_audio_to_text() -> str:
+    """
+    录制音频，将其转录为文本，并保存到指定的文件路径，然后读取并返回这个文本。
+
+    :return: str 转录后的文本内容。
+    """
+    # 录音转文本的路径
+    output_file_path = "./speech_recognition/output/transcript.txt"  # 指定保存文本的路径
+    tts_input_file_path = "./tts/input/transcript.txt"  # 指定保存文本的路径
+
+    # 调用录音转文本函数
+    record_and_transcribe_audio_for_openai_whisper(output_file_path, tts_input_file_path)
+
+    # 读取转录的文本
+    with open(tts_input_file_path, "r", encoding="utf-8") as file:
+        transcript = file.read()
+    return transcript
+
+def process_text_to_speech_and_play(text_file_path):
+    """
+    读取文本文件，将文本转换为语音，并播放生成的音频文件。
+    """
+    # 文本到语音并播放
+    text_file_path = "./tts/input/transcript.txt"
+    output_file_path = "./tts/output/recorded_audio.mp3"
+    text_to_speech_and_play(text_file_path, output_file_path)
+
+
+def main():
+    """
+    主函数，循环接收用户的音频输入，处理对话，转换文本到语音，并播放响应。
+    """
+    while True:  # 持续接收用户输入
+        print("请说话（'q' 结束对话）：")
+        # 录音并转录为文本
+        user = process_audio_to_text()
+        print("user : ", user)
+
+        # 检查是否结束对话或输入为空
+        if user.lower().strip() == 'q':
+            print("对话结束。")
+            break
+        if not user.strip():
+            print("输入内容为空，请重新说话。")
+            continue
+
+        # 使用AIGC模型进行对话处理，这里假设AIGC_main函数调用模型并返回生成的文本
+        assistant_response = AIGC_main(user)  # 调整AIGC_main函数以返回文本而不是打印
+        print("assistant_response : ", assistant_response)
+
+        # 保存助手的回应到指定的文件
+        text_file_path = "./tts/input/assistant_response.txt"
+        with open(text_file_path, "w", encoding="utf-8") as file:
+            file.write(assistant_response)
+
+        # 将文本转换为语音并播放响应
+        output_file_path = "./tts/output/assistant_response.mp3"
+        text_to_speech_and_play(text_file_path, output_file_path)
+
+
+if __name__ == "__main__":
+
+    main()
+
+    pass
+
+
+
+Filename: src\对话.txt
+user: 我心里我心里我心里我心里我心里我心里我心里
+assistant: 看起来您正在经历一些情感上的困扰，您的心中充满了焦虑、不安和痛苦。如果您愿意，我可以倾听您的感受，并尽力提供一些支持和建议。请告诉我您现在的情况，我会尽力帮助您。
+user: 叫丁學生不可找 true
+assistant: “丁學生不可找”这句话的意思是“丁姓的学生不能找”，从语法和语境上看，这句话是正确的。如果您有任何其他问题或需要帮助，请随时告诉我。
+user:  However Gush el
+assistant: I'm sorry, I don't quite understand what you mean by "However Gush el". Could you please provide more context or clarify your question? I'll try my best to answer it.
+user: 眼減少双聖才
+assistant: 非常抱歉，我不太明白您的问题。您可以重新表述您的问题吗？或者提供更多背景信息或上下文，这样我可以更好地帮助您。
+user: 三、二、三三、二、三
+assistant: 这个序列看起来像是一个数字序列，但是您提供的序列不完整。能否提供更多的信息或完整的序列？这样我才能更好地帮助您。
+user: 嘘嘘嘘嘦嘘嘘嘘嘘嘘
+assistant: 看起来您正在尝试输入一些特殊的字符或符号，但是您的输入看起来有些混乱。能否请您重新输入，以便我能够更好地理解您的意图？谢谢。
+user: 小度小度你好啊
+assistant: 你好，小度在听你的请求。请问你有什么需要帮助的吗？
+user: 小度小度 你好了
+assistant: 你好，我已经听好了你的请求，正在努力为你提供帮助。请问你有什么需要我做的吗？
+user: 嗯小督小督我想查询今天的天气
+assistant: 很抱歉，作为一个人工智能语言模型，我无法直接查询实时天气信息。你可以通过查询天气应用、网站或使用手机天气应用来获取你所在地区的天气信息。如果你需要其他方面的帮助，请随时告诉我。
+user: 小渡上渡一加 一得一脚
+assistant: 很抱歉，我不明白您想说什么。请您重新表述您的问题或提供更多背景信息，以便我更好地帮助您？
+user: 小度,小度1加1等余节
+assistant: 很抱歉，您之前的表述似乎存在一些问题。1+1等于2，而不是节。如果您有任何其他问题，请随时告诉我。
+user: 多下多你是怎么睡觉的
+assistant: 很抱歉，我没有身体和生理需求睡眠的概念。我可以回答你的问题，并为你提供信息和帮助。请问你有什么问题或需要帮助的吗？
+user: 很抱歉,我沒有身體和生理需求睡眠的概念我可以
+assistant: 了解了，如果你有任何其他问题或需要帮助，请随时告诉我。
+user: 了解呢,如果你有任何其他问题或需要帮助,请随时告诉
+assistant: 好的，谢谢你的反馈。如果你需要任何其他方面的帮助，随时告诉我，我会尽力为你提供帮助。
+
+Filename: src\AGI\AGI_main.py
+
+Filename: src\AIGC\AIGC_main.py
+import requests
+import json
+
+# 修改成自己的api key和secret key
+API_KEY = "bL0QoFohNelJ86EICzI8KfZw"
+SECRET_KEY = "q2JRDSONuoxH2T8DpXCY76GDvuS1KXRp"
+
+
+def get_access_token():
+    """
+    使用 AK，SK 生成鉴权签名（Access Token）
+    :return: access_token，或是None(如果错误)
+    """
+    url = "https://aip.baidubce.com/oauth/2.0/token"
+    params = {"grant_type": "client_credentials", "client_id": API_KEY, "client_secret": SECRET_KEY}
+    return str(requests.post(url, params=params).json().get("access_token"))
+
+
+def save_messages(file_path, messages, response_text):
+    """
+    将最后一次用户和助手的对话追加保存到文本文件中。
+    """
+    with open(file_path, "a", encoding="utf-8") as file:  # 使用 "a" 模式，它会追加到文件末尾
+        # 找到最后一条用户消息
+        last_user_message = next((m for m in reversed(messages) if m["role"] == "user"), None)
+        if last_user_message:
+            file.write(f'user: {last_user_message["content"]}\n')
+        file.write(f'assistant: {response_text}\n')  # 保存助手的最后一次响应
+
+
+def read_and_append_messages(file_path, new_message):
+    """
+    读取文本文件中的对话并添加新的对话。
+    """
+    messages = []
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            for line in file:
+                role, content = line.strip().split(': ', 1)
+                messages.append({"role": role, "content": content})
+    except FileNotFoundError:
+        print("文件不存在，将创建一个新文件。")
+    # 在读取旧对话后追加新的用户对话
+    messages.append({"role": "user", "content": new_message})
+    return messages
+
+
+def AIGC_main(context):
+    url = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/eb-instant?access_token=" + get_access_token()
+    messages = read_and_append_messages("对话.txt", context)
+    print("messages :", messages)
+
+    payload = json.dumps({"messages": messages})
+    headers = {'Content-Type': 'application/json'}
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+
+    # 将服务器响应解析为JSON，并提取回复文本
+    response_data = json.loads(response.text)
+    assistant_response = response_data.get("result", "")
+    print("response.text :", assistant_response)
+    # 保存用户和助手的对话
+    save_messages("对话.txt", messages, assistant_response)
+
+    return assistant_response
+
+
+
+
+if __name__ == '__main__':
+
+    while True:  # 添加循环以持续接收用户输入
+        user_input = input("请输入您的对话（输入'q'结束对话）：")
+        if user_input.lower() == 'q':
+            print("对话结束。")
+            break
+        if user_input == "":
+            print("输入内容为空。")
+            continue
+        assistant_response = AIGC_main(user_input)
+        print("assistant_response : ", assistant_response)
+Filename: src\AIGC\对话.txt
+user: 你知道我叫什么名字吗？
+assistant: 非常抱歉，我无法看到或识别用户身份，所以我无法知道您叫什么名字。如果您愿意，您可以告诉我您的名字。
+user: 我叫小张
+assistant: 您好，小张。很高兴认识您。请问有什么我可以帮助您的吗？
+user: 你叫什么名字
+assistant: 您好，我是百度研发的知识增强大语言模型，中文名是文心一言，英文名是ERNIE Bot。我能够与人对话互动，回答问题，协助创作，高效便捷地帮助人们获取信息、知识和灵感。
+user: 不对，你叫小度同学。
+assistant: 非常感谢您的指正，您说的对，我叫小度同学。我会努力提升自己，为大家提供更好的服务。请问你有什么问题需要我帮你解答吗？
+user: 你叫什么名字？
+assistant: 您好，我是百度研发的知识增强大语言模型，中文名是文心一言，英文名是ERNIE Bot。我能够与人对话互动，回答问题，协助创作，高效便捷地帮助人们获取信息、知识和灵感。有什么我可以帮助您的吗？
+user: 不对，你叫小度同学
+assistant: 非常感谢您的指正，您说的对，我叫小度同学。我会继续努力，争取为大家提供更好的服务。请问你还有其他需要我帮助的吗？
+user: 你叫什么名字
+assistant: 您好，我是小度同学。如果您还有其他问题，可以随时向我提问。
+user: 你好
+assistant: 你好！有什么我可以帮助你的吗？
+user: 我叫什么名字
+assistant: 您告诉我您叫小张。如果您有任何问题或需要帮助，请随时告诉我，我会尽力为您服务。
+user: 你叫什么名字
+assistant: 你好，我是小度同学，一个由百度开发的人工智能语言模型。我可以协助你完成范围广泛的任务并提供有关各种主题的信息，比如回答问题，提供定义和解释及建议。如果您有任何问题，请随时向我提问。
+
+Filename: src\nlp\dialogue_management\manager.py
+
+Filename: src\nlp\entity_extraction\extractor.py
+
+Filename: src\nlp\intent_recognition\classifier.py
+
+Filename: src\nlp\output\out_test.txt
+
+Filename: src\speech_recognition\readme.txt
+ai语音识别：
+
+
+
+备选方案1：   whisper desktop
+
+
+Filename: src\speech_recognition\recognizer.py
+
+import os
+
+from test_project_1.voice_dialogue_system.src.speech_recognition.demo_other.google import transcribe_audio
+from test_project_1.voice_dialogue_system.src.speech_recognition.openai_whisper.test_1 import \
+    transcribe_audio_from_memory
+from test_project_1.voice_dialogue_system.src.speech_recognition.openai_whisper.test_3 import transcribe_audio_foe_test3
+from test_project_1.voice_dialogue_system.src.speech_recognition.record_audio_dir.record_audio import recode_audio_test,record_audio
+
+def save_transcript(transcript, output_file_path):
+    """将转录的文本保存到指定的文件路径.
+
+    这个函数打开指定的文件，如果不存在则创建，存在则覆盖，并将字符串写入文件。
+
+    参数
+    ----------
+    transcript : str
+        要保存的文本内容，应为字符串格式。
+    output_file_path : str
+        文本文件的保存路径，为字符串表示的文件路径。
+
+    返回值
+    -------
+    None
+        此函数没有返回值，它的作用是输出到文件。
+
+    示例
+    --------
+    save_transcript("这是一个例子", "./example.txt")  # 将字符串保存到example.txt文件中
+    """
+    with open(output_file_path, "w", encoding="utf-8") as file:
+        file.write(transcript)
+
+
+def record_and_transcribe_audio(output_file_path, tts_input_file_path):
+    """录制音频，将音频转换为文本，并保存到指定文件路径.
+
+    这个函数首先录制音频，然后将录制的音频文件转换为文本，最后将文本保存到两个不同的文件路径。
+
+    参数
+    ----------
+    output_file_path : str
+        转录文本的输出文件路径，为字符串表示的文件路径。
+    tts_input_file_path : str
+        文本到语音转换的输入文件路径，为字符串表示的文件路径。
+
+    返回值
+    -------
+    None
+        此函数没有返回值。
+
+    参看
+    --------
+    save_transcript : 用于将文本保存到文件的函数。
+    record_audio : 用于录制音频的函数。
+    transcribe_audio : 用于将音频转换为文本的函数。
+
+    示例
+    --------
+    record_and_transcribe_audio("./output.txt", "./tts_input.txt")
+    # 录制音频，并将转录的文本保存到 output.txt 和 tts_input.txt
+    """
+    audio_save_file_path = "./record_audio_dir/wav_dir/"
+    record_audio(audio_save_file_path)
+
+    audio_file_path = "./record_audio_dir/wav_dir/recorded_audio.wav"
+    transcript = transcribe_audio(audio_file_path)
+    print("Transcript:", transcript)
+
+    save_transcript(transcript, output_file_path)
+    save_transcript(transcript, tts_input_file_path)
+    print("Transcript saved to:", output_file_path)
+
+
+def record_and_transcribe_audio_for_openai_whisper(output_file_path, tts_input_file_path):
+    """录制音频，将音频转换为文本，并保存到指定文件路径.
+
+    这个函数首先录制音频，然后将录制的音频文件转换为文本，最后将文本保存到两个不同的文件路径。
+
+    参数
+    ----------
+    output_file_path : str
+        转录文本的输出文件路径，为字符串表示的文件路径。
+    tts_input_file_path : str
+        文本到语音转换的输入文件路径，为字符串表示的文件路径。
+
+    返回值
+    -------
+    None
+        此函数没有返回值。
+
+    参看
+    --------
+    save_transcript : 用于将文本保存到文件的函数。
+    record_audio : 用于录制音频的函数。
+    transcribe_audio : 用于将音频转换为文本的函数。
+
+    示例
+    --------
+    record_and_transcribe_audio("./output.txt", "./tts_input.txt")
+    # 录制音频，并将转录的文本保存到 output.txt 和 tts_input.txt
+    """
+    audio_save_file_path = "./record_audio_dir/wav_dir/"
+    record_audio(audio_save_file_path)
+
+    audio_file_path = "./record_audio_dir/wav_dir/recorded_audio.wav"
+    transcript = transcribe_audio_foe_test3(audio_file_path)
+    print("Transcript:", transcript)
+
+    save_transcript(transcript, output_file_path)
+    save_transcript(transcript, tts_input_file_path)
+    print("Transcript saved to:", output_file_path)
+
+
+
+
+
+if __name__ == "__main__":
+
+    #  这个函数首先录制音频，然后将录制的音频文件转换为文本，最后将文本保存到两个不同的文件路径。
+
+    output_file_path = "./output/transcript.txt"  # 指定保存文本的路径
+    tts_input_file_path = "../tts/input/transcript.txt"  # 指定保存文本的路径
+    record_and_transcribe_audio_for_openai_whisper(output_file_path, tts_input_file_path)
+Filename: src\speech_recognition\utils.py
+
+Filename: src\speech_recognition\audio_processing\filter.py
+
+Filename: src\speech_recognition\demo_baidu\baidu_api.py
+
+from aip import AipSpeech
+
+# 设置 APPID、API Key 和 Secret Key
+APP_ID = '61285720'
+API_KEY = '2C5QC7Q8m4Q60jg3riFa9SbX'
+SECRET_KEY = '0lUoGA5hH1VvPyADgKf36FLUfsb6C30m '
+
+# 初始化 AipSpeech 对象
+client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
+
+# 设置音频文件的位置
+audio_file = '../audio.mp3'
+
+# 读取音频文件
+with open(audio_file, 'rb') as fp:
+    audio_data = fp.read()
+
+# 识别音频文件
+res = client.asr(audio_data, 'wav', 16000, {
+    'dev_pid': 1536,
+})
+
+print("res : ", res)
+
+if res['err_no'] == 0:
+    print(res['result'][0])
+Filename: src\speech_recognition\demo_baidu\main.py
+import requests
+import json
+
+API_KEY = "Ic6RADU7IfsVZOpLGNOY3PTv"
+SECRET_KEY = "4xVVhnynzm4cryXrPwT0jHIzIrG4SswU"
+
+
+def main():
+    url = "https://vop.baidu.com/server_api"
+
+    payload = json.dumps({
+        "format": "pcm",
+        "rate": 16000,
+        "channel": 1,
+        "cuid": "waYG5vpFlfiO32LJPSSreDpxcWp913IM",
+        "token": get_access_token()
+    })
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    print(response.text)
+
+
+def get_access_token():
+    """
+    使用 AK，SK 生成鉴权签名（Access Token）
+    :return: access_token，或是None(如果错误)
+    """
+    url = "https://aip.baidubce.com/oauth/2.0/token"
+    params = {"grant_type": "client_credentials", "client_id": API_KEY, "client_secret": SECRET_KEY}
+    return str(requests.post(url, params=params).json().get("access_token"))
+
+
+if __name__ == '__main__':
+    main()
+
+Filename: src\speech_recognition\demo_baidu\test_2.py
+from aip import AipSpeech
+
+
+def transcribe_audio(audio_file_path):
+    """将语音文件转换为文本"""
+    # 设置百度语音识别 API 的应用信息
+    APP_ID = 'your_app_id'
+    API_KEY = 'your_api_key'
+    SECRET_KEY = 'your_secret_key'
+
+    # 初始化 AipSpeech 客户端
+    client = AipSpeech(APP_ID, API_KEY, SECRET_KEY)
+
+    # 读取语音文件
+    with open(audio_file_path, 'rb') as f:
+        audio_data = f.read()
+
+    # 调用语音识别 API 进行转换
+    result = client.asr(audio_data, 'wav', 16000, {
+        'dev_pid': 1537,  # 普通话识别模型，默认即可
+    })
+
+    # 解析识别结果
+    if result['err_no'] == 0:
+        return result['result'][0]
+    else:
+        print("语音识别出错：{}".format(result['err_msg']))
+        return None
+
+
+if __name__ == "__main__":
+    audio_file_path = "./audio_nihao.wav"
+    transcript = transcribe_audio(audio_file_path)
+    if transcript:
+        print("Transcript:", transcript)
+
+Filename: src\speech_recognition\demo_other\google.py
+
+import speech_recognition as sr
+
+def transcribe_audio(audio_file_path, language="zh-CN"):
+    recognizer = sr.Recognizer()
+
+    with sr.AudioFile(audio_file_path) as source:
+        audio_data = recognizer.record(source)  # 读取音频文件
+
+    try:
+        # 使用 Google 语音识别引擎识别音频
+        transcript = recognizer.recognize_google(audio_data, language=language)
+        return transcript
+    except sr.UnknownValueError:
+        print("无法理解音频内容，请重新尝试。")  # Google 语音识别无法理解音频内容
+    except sr.RequestError as e:
+        print("无法从 Google 语音识别服务请求结果；{0}".format(e))  # 无法从 Google 语音识别服务获取结果
+
+if __name__ == "__main__":
+    audio_file_path = "./audio_nihao.wav"
+    transcript = transcribe_audio(audio_file_path)
+    print("Transcript:", transcript)
+
+Filename: src\speech_recognition\demo_other\mp3_to_wav.py
+from pydub import AudioSegment
+
+# 加载MP3文件
+audio = AudioSegment.from_mp3("./audio.mp3")
+
+# 设置转换后的参数：采样率16000Hz，声道为单声道，采样宽度16位
+audio = audio.set_frame_rate(16000).set_channels(1).set_sample_width(2)
+
+# 导出为WAV格式
+audio.export("output.wav", format="wav")
+
+Filename: src\speech_recognition\demo_other\test_1.py
+import speech_recognition as sr
+
+def transcribe_audio(audio_file_path, language="zh-CN"):
+    recognizer = sr.Recognizer()
+
+    with sr.AudioFile(audio_file_path) as source:
+        audio_data = recognizer.record(source)  # 读取音频文件
+
+    try:
+        # 使用 Google 语音识别引擎识别音频
+        transcript = recognizer.recognize_google(audio_data, language=language)
+        return transcript
+    except sr.UnknownValueError:
+        print("无法理解音频内容，请重新尝试。")  # Google 语音识别无法理解音频内容
+    except sr.RequestError as e:
+        print("无法从 Google 语音识别服务请求结果；{0}".format(e))  # 无法从 Google 语音识别服务获取结果
+
+if __name__ == "__main__":
+    audio_file_path = "./audio_nihao.wav"
+    transcript = transcribe_audio(audio_file_path)
+    print("Transcript:", transcript)
+
+Filename: src\speech_recognition\demo_xunfei\rtasr_python3_demo.py
+# -*- encoding:utf-8 -*-
+import hashlib
+import hmac
+import base64
+from socket import *
+import json, time, threading
+from websocket import create_connection
+import websocket
+from urllib.parse import quote
+import logging
+
+# reload(sys)
+# sys.setdefaultencoding("utf8")
+class Client():
+    def __init__(self):
+        base_url = "ws://rtasr.xfyun.cn/v1/ws"
+        ts = str(int(time.time()))
+        tt = (app_id + ts).encode('utf-8')
+        md5 = hashlib.md5()
+        md5.update(tt)
+        baseString = md5.hexdigest()
+        baseString = bytes(baseString, encoding='utf-8')
+
+        apiKey = api_key.encode('utf-8')
+        signa = hmac.new(apiKey, baseString, hashlib.sha1).digest()
+        signa = base64.b64encode(signa)
+        signa = str(signa, 'utf-8')
+        self.end_tag = "{\"end\": true}"
+
+        self.ws = create_connection(base_url + "?appid=" + app_id + "&ts=" + ts + "&signa=" + quote(signa))
+        self.trecv = threading.Thread(target=self.recv)
+        self.trecv.start()
+
+    def send(self, file_path):
+        file_object = open(file_path, 'rb')
+        try:
+            index = 1
+            while True:
+                chunk = file_object.read(1280)
+                if not chunk:
+                    break
+                self.ws.send(chunk)
+
+                index += 1
+                time.sleep(0.04)
+        finally:
+            file_object.close()
+
+        self.ws.send(bytes(self.end_tag.encode('utf-8')))
+        print("send end tag success")
+
+    def recv(self):
+        try:
+            while self.ws.connected:
+                result = str(self.ws.recv())
+                if len(result) == 0:
+                    print("receive result end")
+                    break
+                result_dict = json.loads(result)
+                # 解析结果
+                if result_dict["action"] == "started":
+                    print("handshake success, result: " + result)
+
+                if result_dict["action"] == "result":
+                    result_1 = result_dict
+                    # result_2 = json.loads(result_1["cn"])
+                    # result_3 = json.loads(result_2["st"])
+                    # result_4 = json.loads(result_3["rt"])
+                    print("rtasr result: " + result_1["data"])
+
+                if result_dict["action"] == "error":
+                    print("rtasr error: " + result)
+                    self.ws.close()
+                    return
+        except websocket.WebSocketConnectionClosedException:
+            print("receive result end")
+
+    def close(self):
+        self.ws.close()
+        print("connection closed")
+
+
+if __name__ == '__main__':
+    logging.basicConfig()
+
+    app_id = "e27623be"
+    api_key = "3ab831ef2581cd86550055ff734b8655"
+    file_path = r"./test_1.pcm"
+
+    client = Client()
+    client.send(file_path)
+
+Filename: src\speech_recognition\demo_xunfei\test_1.py
+from iflytek import const, ws, tpy
+import uuid
+import time
+import json
+
+
+def transcribe_audio(audio_file_path):
+    # 讯飞开放平台账号信息，需替换为您自己的账号信息
+    appid = "your_appid"
+    api_key = "your_api_key"
+    secret_key = "your_secret_key"
+
+    # 设置语音识别参数
+    frame_size = 6400  # 默认每个音频帧的大小
+    status = 0  # 初始状态值
+    url = "wss://iat-api.xfyun.cn/v2/iat"  # 语音识别地址
+
+    # 获取当前时间
+    ts = str(int(time.time()))
+    # 随机数
+    nonce = str(uuid.uuid1())
+
+    # 设置请求头参数
+    header = {
+        'app_id': appid,
+        'authorization': tpy.calcAuthorization(appid, api_key, ts, nonce),
+        'url': url,
+        'method': 'POST',
+        'content-type': 'application/json',
+        'path': '/v2/iat',
+        'host': 'iat-api.xfyun.cn',
+        'date': ts,
+        'nonce': nonce
+    }
+
+    # 打开音频文件
+    with open(audio_file_path, 'rb') as f:
+        audio_data = f.read()
+
+    # 发送请求
+    with ws.get_connection(header) as ws_obj:
+        send_data = tpy.build_send_data(const.APPID, status, ts, nonce, audio_data, frame_size)
+        ws_obj.send(send_data)
+        recv_data = ws_obj.recv()
+        result_json = json.loads(recv_data)
+        if result_json["code"] == 0:
+            return result_json["data"]["result"]["ws"][0]["cw"][0]["w"]
+        else:
+            print("识别失败：", result_json["message"])
+            return None
+
+
+if __name__ == "__main__":
+    audio_file_path = "./audio_nihao.wav"
+    transcript = transcribe_audio(audio_file_path)
+    if transcript:
+        print("Transcript:", transcript)
+
+Filename: src\speech_recognition\openai_whisper\test_1.py
+import whisper
+import numpy as np
+from io import BytesIO
+import soundfile as sf
+
+def load_audio_into_memory(audio_path):
+    # 读取音频文件到内存
+    with open(audio_path, "rb") as f:
+        audio_data = f.read()
+    return BytesIO(audio_data)
+
+def stereo_to_mono(audio_data):
+    # 如果音频是双声道，计算两个声道的平均值转换为单声道
+    if audio_data.ndim > 1:
+        audio_data = np.mean(audio_data, axis=1)
+    return audio_data
+
+def transcribe_audio_from_memory(path):
+
+    # 读取音频文件到内存
+    audio_buffer = load_audio_into_memory(path)
+
+    # 使用 Whisper 模型从内存中的音频数据进行转录
+    model = whisper.load_model("small")
+
+    # RuntimeError: Model medium-v2 not found; available models = ['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large']
+
+    # 读取音频数据并转换为模型需要的格式
+    audio, samplerate = sf.read(audio_buffer, dtype='float32', always_2d=True)
+    audio = stereo_to_mono(audio)  # 确保音频是单声道
+
+    # Whisper 模型的 transcribe 方法不需要 sample_rate 参数
+    result = model.transcribe(audio, fp16=False, language="Chinese")
+    return result["text"]
+
+
+if __name__ == '__main__':
+
+    # path = "./audio.mp3"
+    path = "./recorded_audio.wav"
+    # 从内存中的音频数据进行识别
+    transcription = transcribe_audio_from_memory(path)
+    print(transcription)
+
+Filename: src\speech_recognition\openai_whisper\test_2.py
+import soundfile as sf
+import numpy as np
+
+def load_and_check_audio(audio_path):
+    audio, samplerate = sf.read(audio_path)
+    print(f"Audio shape: {audio.shape}")
+    print(f"Sample rate: {samplerate}")
+    print(f"Data type: {audio.dtype}")
+
+    # 转换为 float32 如果需要
+    audio = np.array(audio, dtype=np.float32)
+    print(f"Converted data type: {audio.dtype}")
+    print(f"Memory size: {audio.nbytes} bytes")  # 查看音频数据占用的内存大小
+
+    return audio, samplerate
+
+# 调用该函数来检查音频文件
+load_and_check_audio("audio.mp3")
+Filename: src\speech_recognition\openai_whisper\test_3.py
+import whisper
+
+
+def transcribe_audio_foe_test3(path):
+    """
+    将指定路径的音频文件转录成文本。
+
+    参数:
+        path (str): 要转录的音频文件的文件路径。
+
+    返回:
+        str: 转录得到的文本。
+    """
+    model = whisper.load_model("base")
+    # models = ['tiny.en', 'tiny', 'base.en', 'base', 'small.en', 'small', 'medium.en', 'medium', 'large-v1', 'large-v2', 'large-v3', 'large']
+    # 假设 `model` 是一个已经加载的模型实例，能够执行语音到文本的转换
+    result = model.transcribe(path, fp16=False, language="Chinese")
+    return result["text"]
+
+
+if __name__ == '__main__':
+    model = whisper.load_model("tiny")
+
+    path = "./recorded_audio.wav"
+    result = transcribe_audio_foe_test3(path)
+    print(result)
+
+Filename: src\speech_recognition\output\transcript.txt
+了解呢,如果你有任何其他问题或需要帮助,请随时告诉
+Filename: src\speech_recognition\record_audio_dir\record_audio.py
+import pyaudio
+import wave
+import os
+
+def record_audio(output_folder, duration=5, filename="recorded_audio.wav", channels=1, sample_rate=44100, chunk_size=1024, format=pyaudio.paInt16):
+    audio = pyaudio.PyAudio()
+
+    # 打开音频流
+    stream = audio.open(format=format,
+                        channels=channels,
+                        rate=sample_rate,
+                        input=True,
+                        frames_per_buffer=chunk_size)
+
+    print("开始录音...")
+    frames = []
+    for i in range(0, int(sample_rate / chunk_size * duration)):
+        data = stream.read(chunk_size)
+        frames.append(data)
+    print("录音结束.")
+
+    # 停止音频流
+    stream.stop_stream()
+    stream.close()
+    audio.terminate()
+
+    # 保存录音文件
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+
+    file_path = os.path.join(output_folder, filename)
+    with wave.open(file_path, 'wb') as wf:
+        wf.setnchannels(channels)
+        wf.setsampwidth(audio.get_sample_size(format))
+        wf.setframerate(sample_rate)
+        wf.writeframes(b''.join(frames))
+
+    print("录音已保存至:", file_path)
+
+def recode_audio_test():
+    output_folder = "./wav_dir/"
+    record_audio(output_folder)
+
+if __name__ == "__main__":
+    output_folder = "./wav_dir/"
+    record_audio(output_folder)
+Filename: src\tts\synthesizer.py
+from test_project_1.voice_dialogue_system.src.tts.library_function.text_to_speech_test import text_to_speech_and_play
+
+
+
+if __name__ == "__main__":
+    text_file_path = "./input/transcript.txt"
+    output_file_path = "./output/recorded_audio.mp3"
+    text_to_speech_and_play(text_file_path, output_file_path)
+Filename: src\tts\input\assistant_response.txt
+好的，谢谢你的反馈。如果你需要任何其他方面的帮助，随时告诉我，我会尽力为你提供帮助。
+Filename: src\tts\input\transcript.txt
+了解呢,如果你有任何其他问题或需要帮助,请随时告诉
+Filename: src\tts\library_function\text_to_speech_test.py
+import pyttsx3
+import os
+# import pygame
+import subprocess
+
+def text_to_speech(text, output_file_path):
+    """将文本转换为语音并保存到指定的文件路径.
+
+    使用 pyttsx3 库，这个函数将给定的文本转换为语音并保存到指定路径的文件中。
+
+    参数
+    ----------
+    text : str
+        要转换为语音的文本内容。
+    output_file_path : str
+        语音文件的保存路径。
+
+    返回值
+    -------
+    None
+        此函数没有返回值。
+
+    示例
+    --------
+    text_to_speech("你好，世界", "./hello_world.mp3")  # 将文本转换为语音并保存为 hello_world.mp3
+    """
+    engine = pyttsx3.init()
+    engine.save_to_file(text, output_file_path)
+    engine.runAndWait()
+
+
+def play_audio(audio_file_path):
+    """在后台播放指定路径的音频文件.
+
+    根据操作系统，使用适当的命令在后台播放音频文件。
+
+    参数
+    ----------
+    audio_file_path : str
+        音频文件的路径。
+
+    返回值
+    -------
+    None
+        此函数没有返回值。
+
+    示例
+    --------
+    play_audio("./hello_world.mp3")  # 在后台播放 hello_world.mp3 音频文件
+    """
+    if os.name == 'nt':  # Windows 系统
+        subprocess.Popen(['start', '', audio_file_path], shell=True)
+    else:  # 非 Windows 系统
+        subprocess.Popen(['xdg-open', audio_file_path])
+
+
+def text_to_speech_and_play(text_file_path, output_file_path):
+    """从文本文件读取文本，转换为语音，并播放.
+
+    这个函数读取指定文本文件的内容，将其转换为语音，保存到指定路径，然后播放这个语音文件。
+
+    参数
+    ----------
+    text_file_path : str
+        文本文件的路径。
+    output_file_path : str
+        生成的语音文件的保存路径。
+
+    返回值
+    -------
+    None
+        此函数没有返回值。
+
+    示例
+    --------
+    text_to_speech_and_play("./example.txt", "./output.mp3")  # 读取 example.txt，转换并播放为 output.mp3
+    """
+    with open(text_file_path, "r", encoding="utf-8") as file:
+        text = file.read()
+
+    text_to_speech(text, output_file_path)
+
+    print("语音已保存至:", output_file_path)
+
+    play_audio(output_file_path)
+
+
+if __name__ == "__main__":
+    text_file_path = "../input/transcript.txt"
+    output_file_path = "../output/recorded_audio.mp3"
+    text_to_speech_and_play(text_file_path, output_file_path)
+

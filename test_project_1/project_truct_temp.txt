@@ -9,6 +9,19 @@ voice_dialogue_system/
 │   └── nlp_models/
 │
 ├── src/
+│   ├── record_audio_dir/
+│   │
+│   ├── wake_word/
+│   │   ├── utils/
+│   │   │   └── functions.py
+│   │   ├── user_wake_words/
+│   │   │   └── user_1/
+│   │   ├── user_wake_words_temp/
+│   │   │   └── temp.wav
+│   │   ├── wake_word_recorder.py
+│   │   ├── wake_word_detector.py
+│   │   └── wake_word_utils.py
+│   │
 │   ├── speech_recognition/
 │   │   ├── audio_processing/
 │   │   │   └── filter.py
