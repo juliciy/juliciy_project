@@ -1,5 +1,7 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+
+from test_project_1.voice_dialogue_system.src.wake_word.utils.audio_similarity_analysis import compare_audio_similarity
 from test_project_1.voice_dialogue_system.src.wake_word.utils.functions import generate_wake_words_dict
 import librosa
 
@@ -15,6 +17,35 @@ def load_and_extract_features(audio_data, sample_rate):
     return mfcc_mean
 
 
+def is_wake_word_2(audio_data_np, sample_rate, users_wake_words_dict):
+    print("\n")
+    # 先转换输入音频数据
+    input_mfcc = load_and_extract_features(audio_data_np, sample_rate)
+
+    # 准备存放结果的字典
+    similarity_results = {}
+
+    # 遍历提供的用户唤醒词路径
+    for filepath, username in users_wake_words_dict.items():
+        # 加载文件并提取MFCC特征
+        y, sr = librosa.load(filepath, sr=sample_rate)
+        mfcc_saved = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
+        mfcc_saved_mean = np.mean(mfcc_saved, axis=1)
+
+        # 计算与输入音频的相似度
+        similarity = compare_audio_similarity(input_mfcc, mfcc_saved_mean, sample_rate)
+        # similarity = cosine_similarity([input_mfcc], [mfcc_saved_mean])[0][0]
+
+        # 将结果存入字典
+        similarity_results[filepath] = {
+            "user": username,
+            "similarity": similarity
+        }
+        print("similarity_results : ", filepath, similarity, username)
+
+    print("\n")
+    return similarity_results
+
 def is_wake_word(audio_data_np, sample_rate, users_wake_words_dict):
     print("\n")
     # 先转换输入音频数据
@@ -24,25 +55,25 @@ def is_wake_word(audio_data_np, sample_rate, users_wake_words_dict):
     similarity_results = {}
 
     # 遍历提供的用户唤醒词路径
-    for username, filepath in users_wake_words_dict.items():
+    for filepath, username in users_wake_words_dict.items():
         # 加载文件并提取MFCC特征
         y, sr = librosa.load(filepath, sr=sample_rate)
         mfcc_saved = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
         mfcc_saved_mean = np.mean(mfcc_saved, axis=1)
 
         # 计算与输入音频的相似度
-        similarity = cosine_similarity([input_mfcc], [mfcc_saved_mean])[0][0]
+        similarity = compare_audio_similarity(input_mfcc, mfcc_saved_mean, sample_rate)
+        # similarity = cosine_similarity([input_mfcc], [mfcc_saved_mean])[0][0]
 
         # 将结果存入字典
-        similarity_results[username] = {
-            "path": filepath,
+        similarity_results[filepath] = {
+            "user": username,
             "similarity": similarity
         }
-        print("similarity_results : ", filepath, similarity)
+        print("similarity_results : ", filepath, similarity, username)
 
     print("\n")
     return similarity_results
-
 
 if __name__ == '__main__':
     # 测试代码...

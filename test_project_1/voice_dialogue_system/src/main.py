@@ -2,6 +2,7 @@ from test_project_1.voice_dialogue_system.src.AIGC.AIGC_main import AIGC_main
 from test_project_1.voice_dialogue_system.src.speech_recognition.recognizer import record_and_transcribe_audio, \
     record_and_transcribe_audio_for_openai_whisper
 from test_project_1.voice_dialogue_system.src.tts.library_function.text_to_speech_test import text_to_speech_and_play
+from test_project_1.voice_dialogue_system.src.wake_word.wake_word_detector_2 import listen_for_wake_word
 
 
 def process_audio_to_text() -> str:
@@ -40,31 +41,39 @@ def main():
         print("请说话（'q' 结束对话）：")
 
         # 第一步： 进行唤醒词模块，
+        base_path = "./wake_word/user_wake_words_temp"
+        temp_audio_path = './wake_word/user_wake_words_temp/temp_audio.wav'
+        user = listen_for_wake_word(base_path = base_path, temp_audio_path = temp_audio_path)
+        if user:
+            print(f"Wake word detected! Welcome, {user}.")
+        else:
+            print("No wake word detected.")
 
         # 录音并转录为文本
-        user = process_audio_to_text()
-        print("user : ", user)
-
-        # 检查是否结束对话或输入为空
-        if user.lower().strip() == 'q':
-            print("对话结束。")
-            break
-        if not user.strip():
-            print("输入内容为空，请重新说话。")
-            continue
-
-        # 使用AIGC模型进行对话处理，这里假设AIGC_main函数调用模型并返回生成的文本
-        assistant_response = AIGC_main(user)  # 调整AIGC_main函数以返回文本而不是打印
-        print("assistant_response : ", assistant_response)
-
-        # 保存助手的回应到指定的文件
-        text_file_path = "./tts/input/assistant_response.txt"
-        with open(text_file_path, "w", encoding="utf-8") as file:
-            file.write(assistant_response)
-
-        # 将文本转换为语音并播放响应
-        output_file_path = "./tts/output/assistant_response.mp3"
-        text_to_speech_and_play(text_file_path, output_file_path)
+        # user = process_audio_to_text()
+        # print("user : ", user)
+        #
+        # # 检查是否结束对话或输入为空
+        # if user.lower().strip() == 'q':
+        #     print("对话结束。")
+        #     break
+        # if not user.strip():
+        #     print("输入内容为空，请重新说话。")
+        #     continue
+        #
+        # # 使用AIGC模型进行对话处理，这里假设AIGC_main函数调用模型并返回生成的文本
+        # assistant_response = AIGC_main(user)  # 调整AIGC_main函数以返回文本而不是打印
+        # print("assistant_response : ", assistant_response)
+        #
+        # # 保存助手的回应到指定的文件
+        # text_file_path = "./tts/input/assistant_response.txt"
+        # with open(text_file_path, "w", encoding="utf-8") as file:
+        #     file.write(assistant_response)
+        #
+        # # 将文本转换为语音并播放响应
+        # output_file_path = "./tts/output/assistant_response.mp3"
+        # text_to_speech_and_play(text_file_path, output_file_path)
+        break
 
 
 if __name__ == "__main__":

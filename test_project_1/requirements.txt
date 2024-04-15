@@ -1,59 +1,59 @@
-annotated-types==0.6.0
-anyio==4.3.0
-baidu-aip==4.16.13
-certifi==2024.2.2
+audioread==3.0.1
+Brotli @ file:///C:/ci_311/brotli-split_1676435766766/work
+certifi @ file:///C:/b/abs_35d7n66oz9/croot/certifi_1707229248467/work/certifi
 cffi==1.16.0
-chardet==5.2.0
-charset-normalizer==3.3.2
-click==8.1.7
+charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
 colorama==0.4.6
-comtypes==1.3.1
-deepspeech==0.9.3
-distro==1.9.0
-exceptiongroup==1.2.0
-ffmpeg==1.4
+comtypes==1.4.1
+decorator==5.1.1
 filelock==3.13.4
 fsspec==2024.3.1
-gTTS==2.5.1
-h11==0.14.0
-httpcore==1.0.5
-httpx==0.27.0
-idna==3.6
-importlib_metadata==7.1.0
+idna @ file:///C:/ci_311/idna_1676424932545/work
 Jinja2==3.1.3
-llvmlite==0.41.1
+joblib @ file:///C:/b/abs_1anqjntpan/croot/joblib_1685113317150/work
+lazy_loader==0.4
+librosa==0.10.1
+llvmlite==0.42.0
 MarkupSafe==2.1.5
+mkl-fft @ file:///C:/b/abs_19i1y8ykas/croot/mkl_fft_1695058226480/work
+mkl-random @ file:///C:/b/abs_edwkj1_o69/croot/mkl_random_1695059866750/work
+mkl-service==2.4.0
 more-itertools==10.2.0
 mpmath==1.3.0
-networkx==3.1
-numba==0.58.1
-numpy==1.24.4
-openai==1.17.1
+msgpack==1.0.8
+networkx==3.3
+numba==0.59.1
+numpy @ file:///C:/b/abs_c1ywpu18ar/croot/numpy_and_numpy_base_1708638681471/work/dist/numpy-1.26.4-cp311-cp311-win_amd64.whl#sha256=5dfd3e04dc1c2826d3f404fdc7f93c097901f5da9b91f4f394f79d4e038ed81d
 openai-whisper @ git+https://github.com/openai/whisper.git@ba3f3cd54b0e5b8ce1ab3de13e32122d0d5f98ab
+packaging==24.0
 pillow==10.3.0
-PyAudio==0.2.14
+platformdirs==4.2.0
+pooch==1.8.1
+PyAudio==0.2.11
 pycparser==2.22
-pydantic==2.7.0
-pydantic_core==2.18.1
 pydub==0.25.1
-pygame==2.5.2
 pypiwin32==223
+PySocks @ file:///C:/ci_311/pysocks_1676425991111/work
 pyttsx3==2.90
 pywin32==306
 regex==2023.12.25
-requests==2.31.0
+requests @ file:///C:/b/abs_474vaa3x9e/croot/requests_1707355619957/work
+scikit-learn @ file:///C:/b/abs_38k7ridbgr/croot/scikit-learn_1684954723009/work
+scipy @ file:///C:/b/abs_86x0wu5rr1/croot/scipy_1710947370784/work/dist/scipy-1.12.0-cp311-cp311-win_amd64.whl#sha256=5c996fdb2a60e355fd2f706524c685d91dcce64771c8651466d44ecbbccf3cf1
 six==1.16.0
-sniffio==1.3.1
-some-package==0.1
+snowboy==1.3.0
 soundfile==0.12.1
-SpeechRecognition==3.10.3
+soxr==0.3.7
 sympy==1.12
+threadpoolctl @ file:///Users/ktietz/demo/mc3/conda-bld/threadpoolctl_1629802263681/work
 tiktoken==0.6.0
 torch==2.2.2
+torchaudio==2.2.2
 torchvision==0.17.2
 tqdm==4.66.2
-typing_extensions==4.10.0
-urllib3==2.2.1
+typing_extensions==4.11.0
+urllib3 @ file:///C:/b/abs_4etpfrkumr/croot/urllib3_1707770616184/work
+websocket-client==1.7.0
 whisper==1.1.10
+win-inet-pton @ file:///C:/ci_311/win_inet_pton_1676425458225/work
 zhconv==1.4.3
-zipp==3.18.1

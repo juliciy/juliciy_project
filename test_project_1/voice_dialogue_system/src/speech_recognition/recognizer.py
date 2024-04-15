@@ -4,7 +4,7 @@ import os
 from test_project_1.voice_dialogue_system.src.speech_recognition.demo_other.google import transcribe_audio
 from test_project_1.voice_dialogue_system.src.speech_recognition.openai_whisper.test_1 import \
     transcribe_audio_from_memory
-from test_project_1.voice_dialogue_system.src.speech_recognition.openai_whisper.test_3 import transcribe_audio_foe_test3
+from test_project_1.voice_dialogue_system.src.speech_recognition.openai_whisper.audio_transcription import transcribe_audio_to_text
 from test_project_1.voice_dialogue_system.src.speech_recognition.record_audio_dir.record_audio import recode_audio_test,record_audio
 
 def save_transcript(transcript, output_file_path):
@@ -104,7 +104,7 @@ def record_and_transcribe_audio_for_openai_whisper(output_file_path, tts_input_f
     record_audio(audio_save_file_path)
 
     audio_file_path = "./record_audio_dir/wav_dir/recorded_audio.wav"
-    transcript = transcribe_audio_foe_test3(audio_file_path)
+    transcript = transcribe_audio_to_text(audio_file_path)
     print("Transcript:", transcript)
 
     save_transcript(transcript, output_file_path)
